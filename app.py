@@ -8,10 +8,11 @@ Created on Sun Apr  17 15:47:37 2022
 import pandas as pd
 import ast
 
-from functions.helper import get_data, sort_index, oracle_fiap
+from functions.helper import get_data, oracle_fiap
 from functions.helper import transform_plantas
-
+from functions.aux_plot import plot
 from datetime import datetime
+
 
 instancia_fiap = oracle_fiap('rm92629', '050396')
 info_orcl = instancia_fiap.get_data()
@@ -33,7 +34,11 @@ print(f'leitura de xlsx {datetime.now() - inicio}')
 plantas.sort_index(inplace=True)
 
 df_plantas = transform_plantas(plantas)
+df_defeitos = df_plantas[df_plantas['ACAO'] == 'peca_defeito']
+df_injecao = df_plantas[df_plantas['ACAO'] == 'injecao']
 
+plot(df_defeitos, ["Defeitos diários por máquina", 'Defeitos Totais por máquina'])
+plot(df_injecao, ["Produção diária por máquina", "Produção total por máquina"])
 
 
 print(datetime.now() - inicio)

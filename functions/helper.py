@@ -130,3 +130,12 @@ def transform_plantas(plantas):
     new_df.drop(columns=['CD_MAQUINA'], inplace=True)
 
     return new_df
+
+def agrupamento_dia_maquina(df_defeitos):
+    df_defeitos['DATA'] = pd.to_datetime(df_defeitos['DATA'])
+    df_defeitos.set_index('DATA', inplace=True)
+    defeitos_agrupados = df_defeitos.groupby([pd.Grouper(freq='D'), 'MAQUINA']).sum()
+    defeitos_agrupados.reset_index(inplace=True)
+    defeitos_agrupados['DATA'] = defeitos_agrupados['DATA'].dt.date
+    
+    return defeitos_agrupados
