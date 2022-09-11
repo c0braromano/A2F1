@@ -8,9 +8,9 @@ Created on Sun Apr  17 15:47:37 2022
 import pandas as pd
 import ast
 
-from functions.helper import get_data, oracle_fiap
-from functions.helper import transform_plantas
-from functions.aux_plot import plot
+from functions.helper import get_data, oracle_fiap, build_tempo_parada
+from functions.helper import transform_plantas, rmv_outliers, add_motivo
+from functions.aux_plot import plot, plot_prd_dist, plot_violin
 from datetime import datetime
 
 
@@ -25,20 +25,32 @@ maquina_01 = pd.read_csv(
     'data/maquina_01_device_rfid_variable_Gs5M.csv', 
     )
 
+print(f'leitura de xlsx {datetime.now() - inicio}')
+
+
 maquina_01['rfid_type'] = maquina_01['context_rfid'].apply(lambda x: list(ast.literal_eval(x).keys())[0])
 maquina_01['rfid_value'] = maquina_01['context_rfid'].apply(lambda x: list(ast.literal_eval(x).values())[0])
 maquina_01.drop(columns=['context_rfid', 'rfid'], inplace=True)
+df_cod_maq = maquina_01[maquina_01['rfid_type'] == 'cod_maq']
+add_motivo(df_cod_maq)
 
-print(f'leitura de xlsx {datetime.now() - inicio}')
 
 plantas.sort_index(inplace=True)
-
 df_plantas = transform_plantas(plantas)
+df_ciclo = df_plantas[df_plantas['ACAO'] == 'ciclo']
+df_ciclo = rmv_outliers(df_ciclo, 'VALOR')
 df_defeitos = df_plantas[df_plantas['ACAO'] == 'peca_defeito']
 df_injecao = df_plantas[df_plantas['ACAO'] == 'injecao']
+df_parada = df_plantas[(df_plantas['ACAO'] == 'parada')]
+df_tempo_parada = build_tempo_parada(df_parada)
+df_tmp = rmv_outliers(df_tempo_parada, 'TEMPO')
 
 plot(df_defeitos, ["Defeitos diários por máquina", 'Defeitos Totais por máquina'])
 plot(df_injecao, ["Produção diária por máquina", "Produção total por máquina"])
+plot(df_parada[df_parada['VALOR'] == 1], ["Paradas diárias por máquina", "Paradas totais por máquina"])
+plot_violin(df_tempo_parada)
+plot_prd_dist(df_tmp)
+
 
 
 print(datetime.now() - inicio)

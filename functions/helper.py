@@ -139,3 +139,60 @@ def agrupamento_dia_maquina(df_defeitos):
     defeitos_agrupados['DATA'] = defeitos_agrupados['DATA'].dt.date
     
     return defeitos_agrupados
+
+
+def build_tempo_parada(df_parada):
+    df_tempo_parada = pd.DataFrame(columns=['MAQUINA', 'TEMPO'])
+    df_parada['DATA'] = pd.to_datetime(df_parada['DATA'])
+    for index, row in df_parada.iterrows():
+        if row['VALOR'] == 0:
+            inicio = row['DATA']
+        if row['VALOR'] == 1:
+            fim = row['DATA']
+            delta_tempo = fim - inicio
+            minutos = delta_tempo.total_seconds()
+            df_tempo_parada.loc[len(df_tempo_parada)] = [row['MAQUINA'], minutos]
+    
+    return df_tempo_parada
+
+def rmv_outliers(df_tempo_parada, valor):
+    q1 = df_tempo_parada[valor].quantile(0.25)
+    q3 = df_tempo_parada[valor].quantile(0.75)
+    iqr = q3 - q1
+    
+    filtro = (df_tempo_parada[valor] >= q1 - 1.5*iqr) & (df_tempo_parada[valor] <= q3 + 1.5*iqr)
+    
+    return df_tempo_parada.loc[filtro]
+
+def add_motivo(df_cod_maq):
+    df_cod_maq['rfid_value'] = df_cod_maq['rfid_value'].astype(int)
+    def convert_code(code):
+        dict_conversion = {
+            1 : 'Falta de energia',
+            2 : 'Falta operador',
+            3 : 'Falta MP',
+            5 : 'Set-up',
+            6 : 'Ajuste Maquina',
+            7 : 'Limpeza canhão',
+            8 : 'Limpeza maquina',
+            10 : 'Refeição',
+            13 : 'Manutenção ferramentaria',
+            15 : 'Manutenção máquina',
+            17 : 'Aquecimento máquina',
+            22 : 'Teste material',
+            24 : 'Manutenção preventiva',
+            25 : 'Try Out Molde',
+            34 : 'Abastecimento',
+            35 : 'Parada Programada'
+            }
+        try:
+            conversion = dict_conversion[code]
+        except KeyError:
+            return 'Desconhecido'
+    
+        return conversion
+    
+    df_cod_maq['MOTIVO_PARADA'] = df_cod_maq['rfid_value'].apply(lambda value: convert_code(value))
+    
+
+    
