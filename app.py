@@ -42,10 +42,15 @@ add_motivo(df_cod_maq)
 
 plantas.sort_index(inplace=True)
 df_plantas = transform_plantas(plantas)
+
 df_ciclo = df_plantas[df_plantas['ACAO'] == 'ciclo']
 df_ciclo_wout = rmv_outliers(df_ciclo, 'VALOR')
+df_ciclo_wout['VALOR'] = df_ciclo_wout['VALOR'].astype(int)
+
 df_defeitos = df_plantas[df_plantas['ACAO'] == 'peca_defeito']
+
 df_injecao = df_plantas[df_plantas['ACAO'] == 'injecao']
+
 df_parada = df_plantas[(df_plantas['ACAO'] == 'parada')]
 df_tempo_parada = build_tempo_parada(df_parada)
 df_tmp = rmv_outliers(df_tempo_parada, 'TEMPO')

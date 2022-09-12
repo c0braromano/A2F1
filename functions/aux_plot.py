@@ -45,17 +45,15 @@ def plot(df_defeitos, title_list):
 
 def plot_prd_dist(df_tmp):
     sns.set_style("whitegrid")
-    fig = plt.figure(figsize=(16, 9))
+    fig = plt.figure(figsize=(18, 9))
     sns.displot(data=df_tmp, x='TEMPO', hue='MAQUINA', kde=True, element='step')
-    plt.title('Distribuição número de paradas por tempo')
     plt.xlabel('Tempo (segundos)')
     
-    plt.savefig('plots/dist.png', bbox_inches='tight', dpi=100)
+    plt.savefig('plots/dist.png', bbox_inches='tight', dpi=150)
     
 
-def plot_violin(df_tempo_parada, value, titulo):
+def plot_violin(df, value, titulo):
     sns.set_style("whitegrid")
     fig = plt.figure(figsize=(16, 9))
-    sns.catplot(data=df_tempo_parada, x='MAQUINA', y=value, kind='violin')
-    plt.title('Tempo de parada')
+    sns.catplot(data=df, x='MAQUINA', y=value, kind='violin')
     plt.savefig(f'plots/{titulo}_violin.png', bbox_inches='tight', dpi=100)

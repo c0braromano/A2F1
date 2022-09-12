@@ -65,6 +65,37 @@ def build_pdf(tab_maquinas):
     canvas.drawImage(prod_total_maq, 300, 360, 300, 240)
     canvas.drawImage(parada_diaria, 0, 80, 300, 240)
     canvas.drawImage(parada_total, 300, 80, 300, 240)
+    canvas.showPage()
+    
+    canvas.setFillColorRGB(0, 0, 0)
+    canvas.rect(5, 760, 290, 15, fill=True)
+    canvas.rect(318, 760, 290, 15, fill=True)
+    canvas.rect(5, 500, 290, 15, fill=True)
+    canvas.rect(318, 500, 290, 15, fill=True)
+    canvas.rect(35, 245, 540, 15, fill=True)
+
+
+    
+    canvas.setFillColorRGB(1, 1, 1)
+    canvas.drawString(70, 764, 'Defeitos diários por máquina')
+    canvas.drawString(390, 764, 'Defeitos Totais por máquina')
+    canvas.drawString(80, 504, 'Violino tempo de ciclo')
+    canvas.drawString(400, 504, 'Violino tempo de parada')
+    canvas.drawString(230, 249, 'Distribuição por tempo de parada')
+
+    
+    defeitos_diario = 'plots/Defeitos diários por máquina.png'
+    defeitos_total = 'plots/Defeitos Totais por máquina.png'
+    violino_ciclo = 'plots/Tempo de ciclo_violin.png'
+    violino_parada = 'plots/Tempo de parada_violin.png'
+    dist = 'plots/dist.png'
+    
+    canvas.drawImage(defeitos_diario, 0, 515, 300, 240)
+    canvas.drawImage(defeitos_total, 300, 515, 300, 240)
+    canvas.drawImage(violino_ciclo, 0, 260, 300, 240)
+    canvas.drawImage(violino_parada, 300, 260, 300, 240)
+    canvas.drawImage(dist, 35, 0, 500, 240)
+    
     
 
     
