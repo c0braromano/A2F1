@@ -57,3 +57,14 @@ def plot_violin(df, value, titulo):
     fig = plt.figure(figsize=(16, 9))
     sns.catplot(data=df, x='MAQUINA', y=value, kind='violin')
     plt.savefig(f'plots/{titulo}_violin.png', bbox_inches='tight', dpi=100)
+    
+def count_plot(df_cod_maq, value):
+    sns.set_style("whitegrid")
+    fig = plt.figure(figsize=(18, 9))
+    sns.countplot(data=df_cod_maq, x=value)
+    plt.xticks(rotation=45)
+    plt.tick_params(axis='both', labelsize=20)
+    fig.savefig(f'plots/count_motivos.png', bbox_inches='tight', dpi=200)
+    plt.show()
+
+

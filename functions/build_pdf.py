@@ -11,7 +11,7 @@ from reportlab.lib import colors
 
 
 
-def build_pdf(tab_maquinas):
+def build_pdf(tab_maquinas, tab_pecas):
     from reportlab.pdfgen import canvas
 
     def tabelas(data, widlist):
@@ -75,7 +75,7 @@ def build_pdf(tab_maquinas):
     canvas.rect(35, 245, 540, 15, fill=True)
 
 
-    
+    canvas.setFont('Courier-Bold', 12)
     canvas.setFillColorRGB(1, 1, 1)
     canvas.drawString(70, 764, 'Defeitos diários por máquina')
     canvas.drawString(390, 764, 'Defeitos Totais por máquina')
@@ -95,6 +95,28 @@ def build_pdf(tab_maquinas):
     canvas.drawImage(violino_ciclo, 0, 260, 300, 240)
     canvas.drawImage(violino_parada, 300, 260, 300, 240)
     canvas.drawImage(dist, 35, 0, 500, 240)
+    canvas.showPage()
+    
+    count_motivos = 'plots/count_motivos.png'
+    
+
+    canvas.setFillColorRGB(0, 0, 0)
+    canvas.rect(0, 770, 700, 22, fill=True)
+    canvas.rect(35, 730, 540, 15, fill=True)
+
+    canvas.setFont('Courier-Bold', 16)
+    canvas.setFillColorRGB(1, 1, 1)
+    canvas.drawString(260, 774, 'MAQUINA 01')
+    canvas.setFont('Courier-Bold', 12)
+    canvas.drawString(230, 734, 'Contagem motivo paradas')
+    canvas.drawImage(count_motivos, 35, 485, 500, 240)
+
+    table_peca = tabelas(tab_pecas, [120])
+    
+    table_peca.wrapOn(canvas, 1, 1)
+    table_peca.drawOn(canvas, 35, 400)
+
+    
     
     
 

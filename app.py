@@ -11,7 +11,7 @@ import ast
 from functions.helper import get_data, oracle_fiap, build_tempo_parada
 from functions.helper import transform_plantas, rmv_outliers, add_motivo
 from functions.helper import df_to_list
-from functions.aux_plot import plot, plot_prd_dist, plot_violin
+from functions.aux_plot import plot, plot_prd_dist, plot_violin, count_plot
 from functions.build_pdf import build_pdf
 from datetime import datetime
 
@@ -39,6 +39,8 @@ maquina_01.drop(columns=['context_rfid', 'rfid'], inplace=True)
 df_cod_maq = maquina_01[maquina_01['rfid_type'] == 'cod_maq']
 add_motivo(df_cod_maq)
 
+df_cod_prd = maquina_01[maquina_01['rfid_type'].isin(['cod_pdr', 'cod_prd'])]
+tab_pecas = df_to_list(pd.DataFrame(df_cod_prd['rfid_value'].unique(), columns=['Peças produzidas']))
 
 plantas.sort_index(inplace=True)
 df_plantas = transform_plantas(plantas)
@@ -61,8 +63,9 @@ plot(df_parada[df_parada['VALOR'] == 1], ["Paradas diárias por máquina", "Para
 plot_violin(df_tempo_parada, 'TEMPO', 'Tempo de parada')
 plot_violin(df_ciclo_wout, 'VALOR', 'Tempo de ciclo')
 plot_prd_dist(df_tmp)
+count_plot(df_cod_maq, 'MOTIVO_PARADA')
 
-build_pdf(tab_maquinas)
+build_pdf(tab_maquinas, tab_pecas)
 
 
 print(datetime.now() - inicio)
