@@ -63,9 +63,9 @@ class oracle_fiap:
         
         
         ### pesquisar comando para extrair nome das colunas direto do oracle
-        columns =  ['cd_empresa','nm_fantasia','cd_maquina', 
-        'nm_maquina', 'nr_serie_maquina', 'nr_ano_fabricacao',
-        'ds_voltagem']
+        columns =  ['cd_empresa','Empresa','Nome máquina', 
+        'Tipo máquina', 'N série', 'Ano fabricação',
+        'Voltagem']
         
         df = pd.DataFrame(self.cur.fetchall(), columns=columns)
         
@@ -193,6 +193,14 @@ def add_motivo(df_cod_maq):
         return conversion
     
     df_cod_maq['MOTIVO_PARADA'] = df_cod_maq['rfid_value'].apply(lambda value: convert_code(value))
+    
+def df_to_list(df):
+    return_list = [list(df.columns)]
+    
+    for index, row in df.iterrows():
+        return_list.append(list(row))
+    
+    return return_list
     
 
     

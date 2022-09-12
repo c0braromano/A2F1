@@ -18,7 +18,8 @@ def plot(df_defeitos, title_list):
     fig = plt.figure(figsize=(16, 9))
     sns.barplot(x='DATA', y='VALOR', hue='MAQUINA', data=defeitos_agrupados)
     plt.xticks(rotation=45)
-    plt.title(f"{title_list[0]}")
+    plt.legend(loc=2, prop={'size': 20})
+    plt.tick_params(axis='both', labelsize=20)
     fig.savefig(f'plots/{title_list[0]}.png', bbox_inches='tight', dpi=100)
     plt.show()
     
@@ -34,7 +35,6 @@ def plot(df_defeitos, title_list):
     centre_circle = plt.Circle((0, 0), 0.70, fc='white')
     fig = plt.gcf()
     fig.gca().add_artist(centre_circle)
-    plt.title(f"{title_list[1]}")
     fig.savefig(f'plots/{title_list[1]}.png', bbox_inches='tight', dpi=100)
     plt.show()
 
@@ -48,9 +48,9 @@ def plot_prd_dist(df_tmp):
     plt.savefig('plots/dist.png', bbox_inches='tight', dpi=100)
     
 
-def plot_violin(df_tempo_parada, value):
+def plot_violin(df_tempo_parada, value, titulo):
     sns.set_style("whitegrid")
     fig = plt.figure(figsize=(16, 9))
     sns.catplot(data=df_tempo_parada, x='MAQUINA', y=value, kind='violin')
     plt.title('Tempo de parada')
-    plt.savefig('plots/boxplot.png', bbox_inches='tight', dpi=100)
+    plt.savefig(f'plots/{titulo}_violin.png', bbox_inches='tight', dpi=100)
