@@ -28,10 +28,15 @@ def plot(df_defeitos, title_list):
     
     fig = plt.figure(figsize=(16, 9))
     
-    plt.pie(a['VALOR'].values, labels=list(a.index),
+    patches, texts, autotexts = plt.pie(a['VALOR'].values, labels=list(a.index),
             autopct='%1.1f%%', pctdistance=0.85,
             explode=explode)
+    for text in texts:
+        text.set_fontsize(30)
     
+    for text in autotexts:
+        text.set_fontsize(20)
+        
     centre_circle = plt.Circle((0, 0), 0.70, fc='white')
     fig = plt.gcf()
     fig.gca().add_artist(centre_circle)
