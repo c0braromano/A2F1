@@ -16,7 +16,7 @@ def plot(df_defeitos, title_list):
     
     sns.set_style("whitegrid")
     fig = plt.figure(figsize=(16, 9))
-    sns.barplot(x='DATA', y='VALOR', hue='MAQUINA', data=defeitos_agrupados)
+    sns.barplot(x='DATA', y='VALOR', hue='MAQUINA', data=defeitos_agrupados, palette=['orange', 'blue'])
     plt.xticks(rotation=45)
     plt.legend(loc=2, prop={'size': 20})
     plt.tick_params(axis='both', labelsize=20)
